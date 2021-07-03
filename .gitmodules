@@ -1,0 +1,3 @@
+[submodule "shinka"]
+	path = shinka
+	url = https://github.com/kawuchuu/shinka

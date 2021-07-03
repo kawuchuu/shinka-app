@@ -1,0 +1,71 @@
+{
+  "name": "shinka-app",
+  "version": "0.1.0",
+  "private": true,
+  "description": "the app that controls a shinka bot",
+  "author": {
+    "name": "kawuchuu"
+  },
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "electron:build": "vue-cli-service electron:build",
+    "electron:serve": "vue-cli-service electron:serve",
+    "postinstall": "electron-builder install-app-deps",
+    "postuninstall": "electron-builder install-app-deps",
+    "rebuild-opus": "electron-rebuild -v 13.1 -w @discordjs/opus"
+  },
+  "main": "background.js",
+  "dependencies": {
+    "core-js": "^3.6.5",
+    "ejs": "^3.0.1",
+    "vue": "^2.6.11"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "asar": "^3.0.3",
+    "babel-eslint": "^10.1.0",
+    "copy-webpack-plugin": "6",
+    "electron": "^13.0.0",
+    "electron-devtools-installer": "^3.1.0",
+    "electron-rebuild": "^2.3.5",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^6.2.2",
+    "fs-extra": "^10.0.0",
+    "vue-cli-plugin-electron-builder": "~2.1.1",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
+  "_id": "shinka-app@0.1.0",
+  "bugs": {
+    "url": "https://github.com/kawuchuu/shinka-app/issues"
+  },
+  "homepage": "https://github.com/kawuchuu/shinka-app#readme",
+  "license": "GPL-3.0",
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kawuchuu/shinka-app.git"
+  }
+}
