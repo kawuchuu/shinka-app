@@ -31,8 +31,13 @@ if (existsSync(__dirname, 'shinka/main.js')) {
 async function createWindow() {
     // Create the browser window.
     const win = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 1350,
+        height: 750,
+        minWidth: 750,
+        minHeight: 400,
+        show: false,
+        backgroundColor: '#181818',
+        title: 'Shinka',
         webPreferences: {
 
             // Use pluginOptions.nodeIntegration, leave this alone
@@ -40,6 +45,12 @@ async function createWindow() {
             nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
             contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION
         }
+    })
+
+    win.setMenuBarVisibility(false)
+
+    win.on('ready-to-show', () => {
+        win.show()
     })
 
     if (process.env.NODE_ENV === 'development') {

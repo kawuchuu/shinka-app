@@ -33,6 +33,18 @@ module.exports = {
                 ]
             })
         ],
+/*         module: {
+            rules: [
+                {
+                    test: /\.scss$/,
+                    use: [
+                      'vue-style-loader',
+                      'css-loader',
+                      'sass-loader'
+                    ]
+                  }
+            ]
+        }, */
         externals: [path.resolve(__dirname, "shinka"), '@discordjs/opus']
     }
 }
