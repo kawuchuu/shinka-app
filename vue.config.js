@@ -2,6 +2,7 @@ const CopyPlugin = require('copy-webpack-plugin')
 const path = require('path')
 const asar = require('asar')
 const fs = require('fs-extra')
+const { done, info, logWithSpinner, stopSpinner } = require('@vue/cli-shared-utils')
 
 module.exports = {
     pluginOptions: {
@@ -11,16 +12,24 @@ module.exports = {
             builderOptions: {
                 // this is so scuffed but it somehow works lmaooo
                 afterPack: async context => {
-                    console.log('Current directory: ' + context.appOutDir)
+                    info('SHINKA BUILD HOOK')
+                    info('Current directory: ' + context.appOutDir)
+                    logWithSpinner('Extracting app.asar...')
                     asar.extractAll(`${context.appOutDir}/resources/app.asar`, `${context.appOutDir}/resources/app/`)
+                    logWithSpinner('Copying Shinka bot node modules...')
                     fs.copySync(`./shinka/node_modules/`, `${context.appOutDir}/resources/app/shinka/node_modules/`)
+                    logWithSpinner('Moving ffmpeg binary...')
                     if (process.platform === 'win32') {
-                        fs.moveSync(`./shinka/node_modules/ffmpeg-static/ffmpeg.exe`, `${context.appOutDir}/ffmpeg.exe`)
+                        fs.moveSync(`${context.appOutDir}/resources/app/shinka/node_modules/ffmpeg-static/ffmpeg.exe`, `${context.appOutDir}/ffmpeg.exe`)
                     } else {
-                        fs.moveSync(`./shinka/node_modules/ffmpeg-static/ffmpeg`, `${context.appOutDir}/ffmpeg`)
+                        fs.moveSync(`${context.appOutDir}/resources/app/shinka/node_modules/ffmpeg-static/ffmpeg`, `${context.appOutDir}/ffmpeg`)
                     }
+                    logWithSpinner('Creating new app.asar archive...')
                     await asar.createPackage(`${context.appOutDir}/resources/app/`, `${context.appOutDir}/resources/app.asar`)
+                    logWithSpinner('Cleaning up...')
                     fs.rmSync(`${context.appOutDir}/resources/app/`, {recursive: true})
+                    stopSpinner(true)
+                    done('Continuing build...')
                 }
             }
         }
