@@ -12,6 +12,9 @@ export default {
     name: 'App',
     components: {
         Sidebar
+    },
+    mounted() {
+        console.log(this)
     }
 }
 </script>

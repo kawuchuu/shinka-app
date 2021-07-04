@@ -83,6 +83,15 @@ app.on('activate', () => {
 // Some APIs can only be used after this event occurs.
 app.on('ready', async () => {
     createWindow()
+    if (isDevelopment && !process.env.IS_TEST) {
+        // Install Vue Devtools
+        try {
+            const { default: installExtension, VUEJS_DEVTOOLS } = require('electron-devtools-installer');
+            await installExtension(VUEJS_DEVTOOLS)
+        } catch (e) {
+            console.error('Vue Devtools failed to install:', e.toString())
+        }
+    }
 })
 
 // Exit cleanly on request from parent process in development mode.
