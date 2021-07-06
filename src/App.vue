@@ -47,7 +47,7 @@ export default {
 
 :root {
     --app-primary: #4000bf;
-    --bg: #1e1e1e;
+    --bg: #181818;
     --secondary-bg: #0e0e0e;
     --text: white;
     --fonts: Inter, Roboto, sans-serif;
