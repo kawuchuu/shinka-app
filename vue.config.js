@@ -18,7 +18,7 @@ module.exports = {
                     asar.extractAll(`${context.appOutDir}/resources/app.asar`, `${context.appOutDir}/resources/app/`)
                     logWithSpinner('Copying Shinka bot node modules...')
                     fs.copySync(`./shinka/node_modules/`, `${context.appOutDir}/resources/app/shinka/node_modules/`)
-                    logWithSpinner('Moving ffmpeg binary...')
+                    logWithSpinner('Moving ffmpeg executable...')
                     if (process.platform === 'win32') {
                         fs.moveSync(`${context.appOutDir}/resources/app/shinka/node_modules/ffmpeg-static/ffmpeg.exe`, `${context.appOutDir}/ffmpeg.exe`)
                     } else {
@@ -39,6 +39,7 @@ module.exports = {
             new CopyPlugin({
                 patterns: [
                     { from: `./shinka`, to: 'shinka' },
+                    { from: './src/preload.js', to: 'preload.js' }
                 ]
             })
         ],

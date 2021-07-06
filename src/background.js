@@ -3,7 +3,8 @@
 const {
     app,
     protocol,
-    BrowserWindow
+    BrowserWindow,
+    ipcMain
 } = require('electron')
 const { existsSync } = require('fs')
 const path = require('path')
@@ -20,7 +21,7 @@ protocol.registerSchemesAsPrivileged([{
 
 // Check for Shinka & start
 
-if (existsSync(__dirname, 'shinka/main.js')) {
+if (existsSync(__dirname, 'shinka/main.js') && process.argv.indexOf('--disableBot') === -1) {
     if (isDevelopment) {
         require(`../shinka/main`);
     } else {
@@ -43,9 +44,16 @@ async function createWindow() {
             // Use pluginOptions.nodeIntegration, leave this alone
             // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
             nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
-            contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION
+            contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
+            preload: isDevelopment ? path.resolve(__dirname, '../src/preload.js') : path.resolve(__dirname, 'preload.js')
         }
     })
+
+    if (isDevelopment && process.argv.indexOf('--disableBot') !== -1) {
+        ipcMain.handle('state', () => {
+            return 'dev'
+        })
+    } 
 
     win.setMenuBarVisibility(false)
 

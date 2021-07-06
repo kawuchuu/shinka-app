@@ -19,6 +19,7 @@
   "main": "background.js",
   "dependencies": {
     "core-js": "^3.6.5",
+    "dayjs": "^1.10.6",
     "ejs": "^3.0.1",
     "vue": "^2.6.12",
     "vue-router": "^3.4.5",
