@@ -51,8 +51,29 @@
             <section class="module status">
                 <div class="module-container">
                     <h1>Status</h1>
-                    <div class="module-contents">
-                        
+                    <div v-if="!bot.notLoaded" class="module-contents">
+                        <div class="status-item">
+                            <span class="label">Bot Status</span>
+                            <div class="status-indicate">
+                                <div :style="statusColour" class="icon"/>
+                                <p>{{ statusName }}</p>
+                            </div>
+                        </div>
+                        <div v-if="bot.activity" class="status-item">
+                            <span class="label">Activity</span>
+                            <p><span class="act-type">{{ bot.activity.type.toLowerCase() }}</span> {{ bot.activity.name }}</p>
+                        </div>
+                        <div class="status-item">
+                            <span class="label">Uptime</span>
+                            <p>{{ uptime }}</p>
+                        </div>
+                    </div>
+                    <div v-else class="module-contents loading">
+                        <div class="text-large"><div class="load-animation"/></div>
+                        <div class="text-small"><div class="load-animation"/></div>
+                        <div class="text-small"><div class="load-animation"/></div>
+                        <div class="text-small"><div class="load-animation"/></div>
+                        <div class="text-small"><div class="load-animation"/></div>
                     </div>
                 </div>
             </section>
@@ -65,6 +86,23 @@ import dayjs from 'dayjs'
 import * as utc from 'dayjs/plugin/utc'
 
 dayjs.extend(utc)
+
+const timeFormat = s => {
+    if (isNaN(s)) return '-:--'
+    let hour = Math.floor(s / 600);
+    let min = Math.floor(s / 60);
+    let sec = Math.floor(s - (min * 60));
+    if (sec < 10){ 
+        sec = `0${sec}`;
+    }
+    if (min < 10){ 
+        min = `0${min}`;
+    }
+    if (hour < 10) {
+        hour = `0${hour}`;
+    }
+    return `${hour}:${min}:${sec}`;
+}
 
 export default {
     data() {
@@ -104,6 +142,47 @@ export default {
             } else {
                 return ''
             }
+        },
+        statusColour() {
+            switch(this.bot.status) {
+                case 'online': {
+                    return 'background-color: #3AA35C'
+                }
+                case 'idle': {
+                    return 'background-color: #EC9F19'
+                }
+                case 'dnd': {
+                    return 'background-color: #ED4245'
+                }
+                case 'offline': {
+                    return 'background-color: #747F8D'
+                }
+                default: {
+                    return 'background-color: #747F8D'
+                }
+            }
+        },
+        statusName() {
+            switch(this.bot.status) {
+                case 'online': {
+                    return 'Online'
+                }
+                case 'idle': {
+                    return 'Idle'
+                }
+                case 'dnd': {
+                    return 'Do Not Disturb'
+                }
+                case 'offline': {
+                    return 'Invisible'
+                }
+                default: {
+                    return 'Offline'
+                }
+            }
+        },
+        uptime() {
+            return timeFormat(this.bot.uptime / 1000)
         }
     },
     async mounted() {
@@ -113,6 +192,9 @@ export default {
             },
         })
         this.bot = await botReq.json()
+        setInterval(() => {
+            this.bot.uptime = this.bot.uptime + 1000
+        }, 1000)
     }
 }
 </script>
@@ -179,6 +261,32 @@ export default {
     animation: loadAnimation 1.5s infinite;
 }
 
+span.label {
+    font-size: 0.75em;
+    opacity: 0.7;
+    text-transform: uppercase;
+    //font-weight: bold;
+}
+
+.text-large {
+    width: 98%;
+    height: 45px;
+    background: var(--bg);
+    margin-top: 8px;
+    margin-bottom: 30px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.text-small {
+    width: 98%;
+    height: 22px;
+    background: var(--bg);
+    margin: 25px 0px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
 .module.botInfo {
     grid-area: botInfo;
     height: 375px;
@@ -213,13 +321,6 @@ export default {
                 grid-template-rows: 1fr 1fr;
             }
 
-            span.label {
-                font-size: 0.75em;
-                opacity: 0.7;
-                text-transform: uppercase;
-                //font-weight: bold;
-            }
-
             p {
                 margin: 10px 0px 20px;
                 
@@ -251,27 +352,48 @@ export default {
             background: var(--bg);
             overflow: hidden;
         }
-        .text-large {
-            width: 98%;
-            height: 45px;
-            background: var(--bg);
-            margin-top: 8px;
-            margin-bottom: 30px;
-            border-radius: 5px;
-            overflow: hidden;
-        }
-        .text-small {
-            width: 98%;
-            height: 22px;
-            background: var(--bg);
-            margin: 25px 0px;
-            border-radius: 5px;
-            overflow: hidden;
-        }
     }
 }
 
 .module.status {
     grid-area: status;
+
+    .module-contents {
+        margin-top: 15px;
+
+        .status-item {
+            margin-bottom: 20px;
+        }
+
+        p {
+            margin: 10px 0 0;
+        }
+
+        .status-item .status-indicate {
+            display: flex;
+            align-items: center;
+
+            margin-top: 10px;
+
+            .icon {
+                background-color: white;
+                
+                height: 10px;
+                width: 10px;
+                border-radius: 10px;
+
+                margin-right: 10px;
+            }
+
+            p {
+                margin: 0;
+            }
+        }
+
+        .act-type {
+            text-transform: capitalize;
+            font-weight: bold;
+        }
+    }
 }
 </style>

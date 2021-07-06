@@ -28,6 +28,9 @@ new Vue({
     },
     ytPlayerMetadata: data => {
       store.commit('yt/updateMetadata', data)
+    },
+    presenceUpdate: data => {
+      console.log(data)
     }
   },
   render: h => h(App),
