@@ -14,4 +14,15 @@ The electron app.
 6. `npm run electron:serve` or `yarn electron:serve`
 7. To build: `npm run electron:build` or `yarn electron:build`
 
+## Command line arguments
+
+These command line arguments should only be used for development purposes.
+
+**App:**
+- `--disableBot` - only launch the app
+
+**Bot:**
+- `--useServer` - enables the Shinka express server
+- `--devState` - use dev state header for express server
+
 Note: This README is incomplete.

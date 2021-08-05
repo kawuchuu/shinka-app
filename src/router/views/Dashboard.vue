@@ -59,13 +59,22 @@
                                 <p>{{ statusName }}</p>
                             </div>
                         </div>
-                        <div v-if="bot.activity" class="status-item">
+                        <div v-if="bot.activity" class="status-item activity">
                             <span class="label">Activity</span>
-                            <p><span class="act-type">{{ bot.activity.type.toLowerCase() }}</span> {{ bot.activity.name }}</p>
+                            <p><span v-if="bot.activity.type === 'LISTENING'" class="act-type no-upper">Listening to</span><span v-else class="act-type">{{ bot.activity.type.toLowerCase() }}</span> {{ bot.activity.name }}</p>
                         </div>
                         <div class="status-item">
                             <span class="label">Uptime</span>
-                            <p>{{ uptime }}</p>
+                            <!-- please don't judge this i know it's probably bad but it works -->
+                            <p>
+                                <span v-if="uptime.days > 0">{{ uptime.display.days }}, </span>
+                                <span v-if="uptime.hours > 0 && uptime.days > 0">{{ uptime.display.hours }}, </span>
+                                <span v-else-if="uptime.hours > 0">{{ uptime.display.hours }}, </span>
+                                <span v-if="uptime.mins > 0 && uptime.hours > 0">{{ uptime.display.mins }}, </span>
+                                <span v-else-if="uptime.mins > 0">{{ uptime.display.mins }}, </span>
+                                <span v-if="uptime.mins > 0">{{ uptime.display.secs }}</span>
+                                <span v-else>{{ uptime.display.secs }}</span>
+                            </p>
                         </div>
                     </div>
                     <div v-else class="module-contents loading">
@@ -84,25 +93,10 @@
 <script>
 import dayjs from 'dayjs'
 import * as utc from 'dayjs/plugin/utc'
+import * as durationDayJS from 'dayjs/plugin/duration'
 
 dayjs.extend(utc)
-
-const timeFormat = s => {
-    if (isNaN(s)) return '-:--'
-    let hour = Math.floor(s / 600);
-    let min = Math.floor(s / 60);
-    let sec = Math.floor(s - (min * 60));
-    if (sec < 10){ 
-        sec = `0${sec}`;
-    }
-    if (min < 10){ 
-        min = `0${min}`;
-    }
-    if (hour < 10) {
-        hour = `0${hour}`;
-    }
-    return `${hour}:${min}:${sec}`;
-}
+dayjs.extend(durationDayJS)
 
 export default {
     data() {
@@ -115,6 +109,18 @@ export default {
                 uptime: 0,
                 createdAt: 0,
                 avatar: null
+            },
+            uptime: {
+                secs: 0,
+                mins: 0,
+                hours: 0,
+                days: 0,
+                display: {
+                    secs: '0 secs',
+                    mins: '0 mins',
+                    hours: '0 hours',
+                    days: '0 days'
+                }
             }
         }
     },
@@ -180,9 +186,44 @@ export default {
                     return 'Offline'
                 }
             }
-        },
-        uptime() {
-            return timeFormat(this.bot.uptime / 1000)
+        }
+    },
+    methods: {
+        updateUptime() {
+            const uptime = Math.floor(this.bot.uptime / 1000);
+            let secs = uptime
+            let mins = 0
+            let hours = 0
+            let dispSecs = uptime
+            let dispMins = 0
+            let dispHours = 0
+            while (dispSecs >= 60) {
+                mins++
+                dispMins++
+                dispSecs = dispSecs - 60
+            }
+            while (dispMins >= 60) {
+                hours++
+                dispHours++
+                dispMins = dispMins - 60
+            }
+            let days = 0
+            while (dispHours >= 24) {
+                days++
+                dispHours = dispHours - 24
+            }
+            this.uptime.secs = secs
+            this.uptime.mins = mins
+            this.uptime.hours = hours
+            this.uptime.days = days
+            this.uptime.display.secs = `${dispSecs} sec`
+            if (dispSecs > 1 || dispSecs < 1) this.uptime.display.secs += 's'
+            this.uptime.display.mins = `${dispMins} min`
+            if (dispMins > 1 || dispMins < 1) this.uptime.display.mins += 's'
+            this.uptime.display.hours = `${dispHours} hour`
+            if (dispHours > 1 || dispHours < 1) this.uptime.display.hours += 's'
+            this.uptime.display.days = `${days} day`
+            if (days > 1 || days < 1) this.uptime.display.days += 's'
         }
     },
     async mounted() {
@@ -192,8 +233,10 @@ export default {
             },
         })
         this.bot = await botReq.json()
+        this.updateUptime()
         setInterval(() => {
             this.bot.uptime = this.bot.uptime + 1000
+            this.updateUptime()
         }, 1000)
     }
 }
@@ -212,6 +255,8 @@ export default {
         letter-spacing: -0.03em;
         max-width: 1200px;
         width: 100%;
+
+        margin: 10px 0 20px;
     }
 }
 
@@ -322,7 +367,7 @@ span.label {
             }
 
             p {
-                margin: 10px 0px 20px;
+                margin: 5px 0px 25px;
                 
                 span {
                     opacity: 0.5;
@@ -366,14 +411,14 @@ span.label {
         }
 
         p {
-            margin: 10px 0 0;
+            margin: 5px 0 0;
         }
 
         .status-item .status-indicate {
             display: flex;
             align-items: center;
 
-            margin-top: 10px;
+            margin-top: 5px;
 
             .icon {
                 background-color: white;
@@ -390,10 +435,20 @@ span.label {
             }
         }
 
-        .act-type {
-            text-transform: capitalize;
+        .activity p {
             font-weight: bold;
         }
+
+        .act-type {
+            text-transform: capitalize;
+            font-weight: normal;
+        }
+
+        .act-type.no-upper {
+            text-transform: none;
+        }
+
+
     }
 }
 </style>
