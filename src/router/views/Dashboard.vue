@@ -6,7 +6,7 @@
                 <div class="module-container">
                     <h1>Bot Info</h1>
                     <div v-if="!bot.notLoaded" class="module-contents">
-                        <img class="bot-avatar" :src="botAvatar"/>
+                        <img draggable="false" class="bot-avatar" :src="botAvatar"/>
                         <div class="bot-info-section">
                             <h3>{{bot.username}}<span>#{{bot.discriminator}}</span></h3>
                             <div class="bot-info-grid">
@@ -29,7 +29,7 @@
                                 <div class="info-item">
                                     <span class="label">Owner</span>
                                     <div class="owner">
-                                        <img :src="ownerAvatar">
+                                        <img draggable="false" :src="ownerAvatar">
                                         <p>{{bot.owner.username}}<span>#{{bot.owner.discriminator}}</span></p>
                                     </div>
                                 </div>
@@ -75,6 +75,10 @@
                                 <span v-if="uptime.mins > 0">{{ uptime.display.secs }}</span>
                                 <span v-else>{{ uptime.display.secs }}</span>
                             </p>
+                        </div>
+                        <div class="status-item">
+                            <span class="label">Audio Player</span>
+                            <p>0 streams in progress</p>
                         </div>
                     </div>
                     <div v-else class="module-contents loading">

@@ -31,7 +31,7 @@ export default {
     }
 }
 
-.router-link-active .side-button {
+.router-link-exact-active .side-button {
     background-color: var(--app-primary);
 
     opacity: 1;

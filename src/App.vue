@@ -60,6 +60,28 @@ body {
     font-family: var(--fonts);
 
     margin: 0;
+    user-select: none;
+}
+
+
+::-webkit-scrollbar {
+    width: 16px !important;
+    background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+    border: solid 4px var(--bg);
+    background: #ffffff50;
+    border-radius: 20px;
+    min-height: 60px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #ffffff;
+}
+::-webkit-scrollbar-thumb:active {
+    background: var(--app-primary);
+}
+::-webkit-scrollbar-button {
+    display: none
 }
 
 #app {
@@ -118,6 +140,7 @@ main {
 
     h1 {
         margin: 20px 0 0;
+        letter-spacing: -0.025em;
     }
 
     p {
