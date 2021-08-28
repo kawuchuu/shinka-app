@@ -1,12 +1,13 @@
 <template>
-    <div class="server-item">
-        <img draggable="false" :src="icon">
-        <div class="info">
-            <h2>{{ guild.name }}</h2>
-            <span>ID: {{ guild.id }}</span>
+    <router-link :to="`/server?id=${guild.id}`">
+        <div class="server-item">
+            <img draggable="false" :src="icon">
+            <div class="info">
+                <h2>{{ guild.name }}</h2>
+            </div>
+            <i class="material-icons">chevron_right</i>
         </div>
-        <i class="material-icons">chevron_right</i>
-    </div>
+    </router-link>
 </template>
 
 <script>
@@ -24,15 +25,15 @@ export default {
 .server-item {
     display: grid;
     grid-template-areas: 'icon info indicate';
-    grid-template-columns: 100px 1fr 30px;
-    gap: 20px;
+    grid-template-columns: 70px 1fr 30px;
+    gap: 30px;
     padding: 18px 10px;
     border-radius: 10px;
     cursor: pointer;
     
     img {
-        width: 90px;
-        height: 90px;
+        width: 70px;
+        height: 70px;
         border-radius: 120px;
         grid-area: 'icon';
         align-self: center;

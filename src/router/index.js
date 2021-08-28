@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 
 import Dashboard from './views/Dashboard'
 import Servers from './views/Servers'
+import ServerView from './views/ServerView'
 
 Vue.use(VueRouter)
 
@@ -18,6 +19,11 @@ const router = new VueRouter({
             path: '/servers',
             component: Servers,
             name: 'Servers'
+        },
+        {
+            path: '/server',
+            component: ServerView,
+            name: 'Server View'
         }
     ]
 })
