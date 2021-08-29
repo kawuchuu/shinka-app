@@ -1,5 +1,5 @@
 <template>
-    <router-link :to="`/server?id=${guild.id}`">
+    <router-link :to="`/servers/${guild.id}?name=${guild.name}`">
         <div class="server-item">
             <img draggable="false" :src="icon">
             <div class="info">

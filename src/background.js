@@ -55,6 +55,10 @@ async function createWindow() {
         })
     } 
 
+    ipcMain.handle('ytKey', () => {
+        return require('../shinka/config.json').ytkey
+    })
+
     win.setMenuBarVisibility(false)
 
     win.on('ready-to-show', () => {

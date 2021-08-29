@@ -1,12 +1,13 @@
 <template>
     <div class="server-view">
-        <div v-if="!guild.id" class="load-spinner" />
-        <div v-if="guild.id" class="title">
+        <div class="title">
             <router-link draggable="false" :to="'/servers'">
                 <i class="material-icons">arrow_back</i>
             </router-link>
-            <h1>{{ guild.name }}</h1>
+            <h1 v-if="$route.query.name">{{ $route.query.name }}</h1>
+            <h1 v-else-if="guild.name">{{ guild.name }}</h1>
         </div>
+        <div v-if="!guild.id" class="load-spinner" />
         <div v-if="guild.id" class="server-grid">
             <section class="module info">
                 <div class="module-container">
@@ -43,9 +44,28 @@
             </section>
             <section class="module options">
                 <div class="module-container">
-                    <h1>Options</h1>
-                    <div class="module-contents">
-                        <p>This is a placeholder</p>
+                    <router-link :to="`./${guild.id}/audiocontrol`">
+                        <div class="option">
+                            <div>
+                                <i class="material-icons">queue_music</i>
+                                <span>Control the audio player</span>
+                            </div>
+                            <i class="material-icons">chevron_right</i>
+                        </div>
+                    </router-link>
+                    <div class="option">
+                        <div>
+                            <i class="material-icons">edit</i>
+                            <span>Edit commands</span>
+                        </div>
+                        <i class="material-icons">chevron_right</i>
+                    </div>
+                    <div class="option">
+                        <div>
+                            <i class="material-icons">settings</i>
+                            <span>Server settings</span>
+                        </div>
+                        <i class="material-icons">chevron_right</i>
                     </div>
                 </div>
             </section>
@@ -80,7 +100,7 @@ export default {
         }
     },
     async mounted() {
-        const guild = await fetch(`http://localhost:64342/api/guilds?id=${this.$route.query.id}`, {
+        const guild = await fetch(`http://localhost:64342/api/guilds?id=${this.$route.params.id}`, {
             headers: {
                 'state': window.appState
             }
@@ -147,8 +167,8 @@ export default {
     'info members'
     'options members';
     grid-template-columns: 2fr 1fr;
-    grid-template-rows: 240px 480px;
-    gap: 40px;
+    grid-template-rows: 240px 1fr;
+    gap: 30px;
     margin-top: 20px;
     max-width: 1200px;
     width: 100%;
@@ -181,6 +201,41 @@ span.label {
 
 .options {
     grid-area: options;
+
+    .module-container {
+        padding: 18px;
+    }
+
+    .option {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 8px 0px;
+        padding: 10px 8px;
+        border-radius: 10px;
+
+        div {
+            display: flex;
+            align-items: center;
+
+            span {
+                margin-left: 20px;
+            }
+        }
+    }
+
+    .option:hover {
+        background: #ffffff10;
+    }
+
+    .option:active {
+        background: #ffffff10;
+        opacity: 0.5;
+    }
+
+    .option:first-child {
+        margin-top: 0px;
+    }
 }
 
 .info {
@@ -242,9 +297,10 @@ span.label {
 
 .members {
     grid-area: members;
+    //overflow: hidden;
+    height: calc(100vh - 180px);
     overflow: hidden;
     overflow-y: auto;
-    height: 100%;
 
     .module-contents {
         margin-top: 25px;

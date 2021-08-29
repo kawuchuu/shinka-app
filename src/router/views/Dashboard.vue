@@ -269,7 +269,7 @@ export default {
     grid-template-areas:
     'botInfo status';
     grid-template-columns: 2fr 1fr;
-    gap: 40px;
+    gap: 30px;
     margin-top: 20px;
     max-width: 1200px;
     width: 100%;

@@ -3,11 +3,11 @@
         <img loading="lazy" :src="avatar" />
         <div class="memberInfo">
             <div v-if="member.nick">
-                <h3>{{ member.nick }}</h3>
+                <h3 :style="displayColour">{{ member.nick }}</h3>
                 <span class="nick">{{ member.name }}#{{ member.discrim }}</span>
             </div>
             <div v-else>
-                <h3>{{ member.name }}<span class="disc">#{{ member.discrim }}</span></h3>
+                <h3 :style="displayColour">{{ member.name }}<span class="disc">#{{ member.discrim }}</span></h3>
             </div>
         </div>
     </div>
@@ -23,6 +23,13 @@ export default {
             } else {
                 return `https://cdn.discordapp.com/avatars/${this.member.id}/${this.member.avatar}.png?size=64`
             }
+        },
+        displayColour() {
+            if (!this.member.displayColour || this.member.displayColour == '#000000') {
+                return ''
+            } else {
+                return `color: ${this.member.displayColour}`
+            } 
         }
     }
 }
