@@ -56,7 +56,7 @@ export default {
     },
     methods: {
         startSearch() {
-            this.queryTimeout = setTimeout(this.doSearch, 500)
+            this.queryTimeout = setTimeout(this.doSearch, 1000)
         },
         async doSearch() {
             this.startDisplayResults = true

@@ -2,6 +2,10 @@
 
 The electron app.
 
+# Important
+
+This currently doesn't work with the bot due to discord.js requiring Node => 16.6.0. As a workaround, you can run this in dev mode with the bot running separately.
+
 ## How to get this thing to work
 
 1. `git clone --recurse-submodules https://github.com/kawuchuu/shinka-app.git`

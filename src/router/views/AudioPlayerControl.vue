@@ -75,7 +75,7 @@ export default {
 
 <style lang="scss" scoped>
 .audio-control {
-    margin: 40px;
+    margin: 20px 40px;
 
     display: flex;
     flex-direction: column;

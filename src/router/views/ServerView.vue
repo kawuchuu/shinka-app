@@ -121,7 +121,7 @@ export default {
 
 <style lang="scss" scoped>
 .server-view {
-    margin: 40px;
+    margin: 20px 40px;
 
     display: flex;
     flex-direction: column;
@@ -298,7 +298,7 @@ span.label {
 .members {
     grid-area: members;
     //overflow: hidden;
-    height: calc(100vh - 180px);
+    height: calc(100vh - 160px);
     overflow: hidden;
     overflow-y: auto;
 
